@@ -3,5 +3,6 @@
         <file>images/play.svg</file>
         <file>images/pause.svg</file>
         <file>images/library.svg</file>
+        <file>images/back.svg</file>
     </qresource>
 </RCC>

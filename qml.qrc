@@ -1,9 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>images/pause.svg</file>
-        <file>images/play.svg</file>
-        <file>main.cpp</file>
-        <file>fileDialog.qml</file>
+        <file>FilePicker.qml</file>
+        <file>VideoPlayer.qml</file>
     </qresource>
 </RCC>
