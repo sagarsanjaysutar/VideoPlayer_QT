@@ -44,17 +44,13 @@ Video{
 
             MouseArea{
                 anchors.fill: parent
-                onClicked: filePickerWindowLoader.item.visibility = 2
+                onClicked: filePickerWindow.visibility = 2
             }
 
-            Loader{
-                id: filePickerWindowLoader
-                sourceComponent: FilePicker{
-                    id: filePickerWindow
-                    onVideoFileSelected: {
-                        console.log("xxx\n" + videofilePath)
-                        video.source = "file://" + videofilePath
-                    }
+            FilePicker{
+                id: filePickerWindow
+                onVideoFileSelected: {
+                    video.source = "file://" + videofilePath
                 }
             }
         }

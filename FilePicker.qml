@@ -7,25 +7,29 @@ import QtGraphicalEffects 1.0
 Window{
     id: filePickerWindow
 
+    // User properties
+    property alias folder: flModel.folder
+    signal videoFileSelected(var videofilePath)
+
+    // Internal properties of the component
     property int windowSize: 600
+    property var previousDirPathList: []
 
     maximumHeight: windowSize
     maximumWidth: windowSize
     minimumHeight: windowSize
     minimumWidth: windowSize
-    
     title: "File Picker"
     color: "#282828"
-    property var previousDirPathList: [];
 
-    signal videoFileSelected(var videofilePath)
-
+    // Top bar displaying back button & current file path
     Rectangle{
         id: topBar
         width: parent.width
         height: parent.height * 0.07
         color: "#282828"
 
+        // Back button
         Rectangle{
             id: backBtn
             height: parent.height / 1.5
@@ -53,6 +57,7 @@ Window{
             }
         }
 
+        // File Path
         Rectangle{
             anchors.left: backBtn.right
             anchors.leftMargin: 10
@@ -71,6 +76,7 @@ Window{
         }
     }
 
+    // Text to display incase no the folder is empty
     Rectangle{
         width: parent.width - 20
         height: 60
@@ -93,44 +99,52 @@ Window{
         }
     }
 
+    // List View displaying files and folders
     ListView{
         id: folderList
         anchors.top: topBar.bottom
         anchors.topMargin: 10
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
         model: FolderListModel{
             id: flModel
             folder: "file://" + rootPath
             nameFilters: ["*.webm", "*.mkv", "*.flv", "*.vob", "*.ogv", "*.ogg", "*.rrc", "*.gifv", "*.mng", "*.mov", "*.avi", "*.qt", "*.wmv", "*.yuv", "*.rm", "*.asf", "*.amv", "*.mp4", "*.m4p", "*.m4v", "*.mpg", "*.mp2", "*.mpeg", "*.mpe", "*.mpv", "*.m4v", "*.svi", "*.3gp", "*.3g2", "*.mxf", "*.roq", "*.nsv", "*.flv", "*.f4v", "*.f4p", "*.f4a", "*.f4b", "*.mod"]
             showDirs: true
         }
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
         clip: true
         spacing: 5
         delegate: Rectangle{
-            width: parent.width - 20
             height: 60
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            anchors.right: parent.right
+            anchors.rightMargin: 10
             radius: 5
             color: "#80d3d3d3"
             border.color: "#d3d3d3"
             border.width: 3
 
+            // Folder/File onClicked logic
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
                     if(fileIsDir){
-                        previousDirPathList.push(flModel.folder)
-                        flModel.folder = "file://" + filePath
+                        // If a folder is clicked, enter into it.
+                        previousDirPathList.push(flModel.folder)    // Push the current folder into a list.
+                        flModel.folder = "file://" + filePath       // Newly clicked folder path becomes the flModel's folder.
                     }
                     else{
-                        videoFileSelected(filePath)
-                        filePickerWindow.visibility = 0
+                        // If a video file is clicked, emit the file path and close the window
+                        videoFileSelected(filePath) // Emitting the selected file's path
+                        flModel.folder = filePath   // Setting the selected file path as flModel's folder so that the FilePicker reopens on last selected directory.
+                        filePickerWindow.close()    // Close once file is selected
                     }
                 }
             }
 
+            // Component displaying file icon, name and path.
             GridLayout{
                 columns: 3
                 rowSpacing: 20
@@ -138,6 +152,7 @@ Window{
                 width: parent.width
                 height: parent.height
 
+                // File Icon
                 Image{
                     id: fileIcon
                     height: parent.height
@@ -152,6 +167,7 @@ Window{
                     }
                 }
 
+                // File Name
                 Text{
                     Layout.preferredWidth: parent.width * 0.25
                     height: parent.height
@@ -162,6 +178,7 @@ Window{
                     elide: Text.ElideRight
                 }
 
+                // File Path
                 Text{
                     Layout.preferredWidth: parent.width * 0.50
                     height: parent.height
