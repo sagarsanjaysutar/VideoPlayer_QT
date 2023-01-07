@@ -4,5 +4,8 @@
         <file>images/pause.svg</file>
         <file>images/library.svg</file>
         <file>images/back.svg</file>
+        <file>images/folder.svg</file>
+        <file>images/file.svg</file>
+        <file>images/video.svg</file>
     </qresource>
 </RCC>

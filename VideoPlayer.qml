@@ -3,15 +3,9 @@ import QtMultimedia 5.11
 
 Video{
     id: video
-
     focus: true
-
+    autoPlay: true
     Keys.onSpacePressed: video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play()
-    Component.onCompleted: {
-        console.log(root.width + "\t" + root.height)
-        console.log(video.width + "\t" + video.height)
-        console.log(video.availability == MediaPlayer.Available ? "Available" : "Not availabel")
-    }
 
     Rectangle{
         id: controlsContainer
@@ -47,6 +41,22 @@ Video{
                 anchors.centerIn: parent
                 source: "qrc:/images/library.svg"
             }
+
+            MouseArea{
+                anchors.fill: parent
+                onClicked: filePickerWindowLoader.item.visibility = 2
+            }
+
+            Loader{
+                id: filePickerWindowLoader
+                sourceComponent: FilePicker{
+                    id: filePickerWindow
+                    onVideoFileSelected: {
+                        console.log("xxx\n" + videofilePath)
+                        video.source = "file://" + videofilePath
+                    }
+                }
+            }
         }
 
         Rectangle{
@@ -60,6 +70,11 @@ Video{
             Image{
                 anchors.fill: parent
                 source: video.playbackState == MediaPlayer.PlayingState ? "qrc:/images/pause.svg" : "qrc:/images/play.svg"
+            }
+
+            MouseArea{
+                anchors.fill: parent
+                onClicked: video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play()
             }
         }
     }
