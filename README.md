@@ -1,5 +1,5 @@
 # Video Player
 
-A basic video player with play/pause and file picker functionality
+A basic video player with play/pause and file picker functionality.
 
-[![Watch the video]](https://youtu.be/vt5fpE0bzSY)
+No QtQuick Controls, QtWidgets or QtDialogs are used.
