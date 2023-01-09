@@ -9,7 +9,7 @@ Window{
 
     // User properties
     property alias folder: flModel.folder
-    signal videoFileSelected(var videofilePath)
+    signal videoFileSelected(var videoFileName, var videofilePath)
 
     // Internal properties of the component
     property int windowSize: 600
@@ -137,9 +137,8 @@ Window{
                     }
                     else{
                         // If a video file is clicked, emit the file path and close the window
-                        videoFileSelected(filePath) // Emitting the selected file's path
-                        flModel.folder = filePath   // Setting the selected file path as flModel's folder so that the FilePicker reopens on last selected directory.
-                        filePickerWindow.close()    // Close once file is selected
+                        videoFileSelected(fileName, filePath)   // Emitting the selected file's path
+                        filePickerWindow.close()         // Hide once file is selected
                     }
                 }
             }

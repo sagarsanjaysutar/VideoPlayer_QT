@@ -5,14 +5,51 @@ Video{
     id: video
     focus: true
     autoPlay: true
-    Keys.onSpacePressed: video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play()
 
+    // Video control key bindings
+    Keys.onSpacePressed: video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play()
+    Keys.onLeftPressed: video.seek(position - 5000)
+    Keys.onRightPressed: video.seek(position + 5000)
+
+    // Control the Slider handle as the video progresses
+    onPositionChanged: {
+        if(duration > 0){
+            if(position == duration){
+                // If end of the video is reached then reset the slider handle position
+                sliderHandle.x = slider.x
+            }
+            else{
+                // Keep updating the Slider Handle position
+                var min = video.position
+                var max = video.duration
+                var updateValue = (((min/max) * 100) * slider.width)
+                sliderHandle.x = sliderHandle.x + updateValue
+            }
+        }
+    }
+
+    // Control the smooth animation of slider handle.
+    onPlaybackStateChanged: {
+        if(video.playbackState == MediaPlayer.PausedState){
+            // Stop the slider handle animation if video is paused
+            sliderHandleAnimation.velocity = 0
+        }else if(video.playbackState == MediaPlayer.PlayingState){
+            // Default the slider handle animation velocity which makes the sliding smooth
+            sliderHandleAnimation.velocity = 100
+        }else{
+            // Disable the  slider handle animation
+            sliderHandleAnimation.velocity = -1
+        }
+    }
+
+    // Bottom controls. Play/Pause, FilePicker button and Slider
     Rectangle{
         id: controlsContainer
         width: parent.width
-        height: parent.height/7
+        height: parent.height/6
         anchors.bottom: parent.bottom
         gradient: Gradient {
+            // Fade background
             GradientStop { position: 0.00; color: "#00000000" }
             GradientStop { position: 0.02; color: "#03000000" }
             GradientStop { position: 0.06; color: "#0F000000" }
@@ -25,14 +62,15 @@ Video{
             GradientStop { position: 1.0; color: "#000000" }
         }
 
+        // File Picker Button
         Rectangle{
             id: libraryButton
             width: parent.width / 20
             height: width
-            radius: width
             anchors.verticalCenter: controlsContainer.verticalCenter
             anchors.left: parent.left
-            anchors.leftMargin: parent.width / 25
+            anchors.leftMargin: 20
+            radius: width
             color: "#282828"
 
             Image{
@@ -44,23 +82,27 @@ Video{
 
             MouseArea{
                 anchors.fill: parent
-                onClicked: filePickerWindow.visibility = 2
+                onClicked: filePickerWindows.show()
             }
 
             FilePicker{
-                id: filePickerWindow
+                id: filePickerWindows
                 onVideoFileSelected: {
                     video.source = "file://" + videofilePath
+                    root.title = videoFileName
                 }
             }
         }
 
+        // Play/Pause Button
         Rectangle{
             id: playButton
-            width: parent.width / 20
+            width: parent.width / 15
             height: width
+            anchors.left: libraryButton.right
+            anchors.leftMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
             radius: width
-            anchors.centerIn: controlsContainer
             color: "#282828"
 
             Image{
@@ -71,6 +113,33 @@ Video{
             MouseArea{
                 anchors.fill: parent
                 onClicked: video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play()
+            }
+        }
+
+        // Slider
+        Rectangle{
+            id: slider
+            height: 5
+            anchors.left: playButton.right
+            anchors.leftMargin: 10
+            anchors.right: parent.right
+            anchors.rightMargin: 20
+            anchors.verticalCenter: parent.verticalCenter
+            radius: 2
+            color: "#4D282828"
+        }
+
+        // Slider Handle
+        Rectangle{
+            id: sliderHandle
+            width: 12
+            height: width
+            radius: width
+            anchors.verticalCenter: slider.verticalCenter
+            x: slider.x
+
+            Behavior on x{
+                SmoothedAnimation { id: sliderHandleAnimation;}
             }
         }
     }

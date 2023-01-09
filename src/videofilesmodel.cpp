@@ -5,8 +5,7 @@
 
 VideoFilesModel::VideoFilesModel(QObject *parent) : QObject(parent)
 {
-    QString rootPathStr = QDir::rootPath();
-    qDebug() << rootPathStr;
+    QString rootPathStr = QDir::rootPath();   
 
     QDir homeDir(rootPathStr);
     QDirIterator dirItr(rootPathStr, {".mp4"}, QDir::Files);
