@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>FilePicker.qml</file>
-        <file>VideoPlayer.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/FilePicker.qml</file>
+        <file>qml/VideoPlayer.qml</file>
     </qresource>
 </RCC>

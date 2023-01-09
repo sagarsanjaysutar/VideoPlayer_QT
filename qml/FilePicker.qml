@@ -12,7 +12,7 @@ Window{
     signal videoFileSelected(var videoFileName, var videofilePath)
 
     // Internal properties of the component
-    property int windowSize: 600
+    property int windowSize: 400
     property var previousDirPathList: []
 
     maximumHeight: windowSize
@@ -116,7 +116,7 @@ Window{
         clip: true
         spacing: 5
         delegate: Rectangle{
-            height: 60
+            height: 50
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.right: parent.right

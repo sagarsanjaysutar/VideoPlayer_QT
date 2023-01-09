@@ -5,7 +5,7 @@ Window {
     id: root
     visible: true
     width: 640
-    height: 400
+    height: 360
     title: "Video Player"
     color: "#282828"
 
